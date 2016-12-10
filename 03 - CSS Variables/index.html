@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Scoped CSS Variables and JS</title>
 </head>
+
 <body>
-  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+  <h2>Updating CSS Variables with <span class='hl'>JavaScript</span></h2>
 
   <div class="controls">
     <label for="spacing">Spacing:</label>
-    <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+    <input type="range" name="spacing" min="0" max="200" value="10" data-sizing="px">
 
     <label for="blur">Blur:</label>
-    <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+    <input type="range" name="blur" min="0" max="25" value="5" data-sizing="px">
 
     <label for="base">Base Color</label>
-    <input type="color" name="base" value="#ffc600">
+    <input type="color" name="base" value="#2ecc71">
   </div>
 
-  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+  <img src="https://unsplash.it/800/500">
+
 
   <style>
+     :root {
+      --base: #2ecc71;
+      --spacing: 10px;
+      --blur: 10px;
+    }
 
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -47,13 +64,119 @@
       text-decoration: none;
     }
 
-    input {
-      width:100px;
+    input[type=range] {
+      -webkit-appearance: none;
+      margin: 0;
+      width: 200px;
+    }
+
+    input[type=range]:focus {
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 200px;
+      height: 10px;
+      cursor: pointer;
+      animate: 0.2s;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      background: var(--base);
+      border-radius: 1.3px;
+      border: 0.2px solid #010101;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      height: 30px;
+      width: 30px;
+      border-radius: 100%;
+      background: #ffffff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -12px;
+    }
+
+    input[type=range]:focus::-webkit-slider-runnable-track {
+      background: var(--base);
+    }
+
+    input[type=range]::-moz-range-track {
+      width: 100%;
+      height: 8.4px;
+      cursor: pointer;
+      animate: 0.2s;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      background: var(--base);
+      border-radius: 1.3px;
+      border: 0.2px solid #010101;
+    }
+
+    input[type=range]::-moz-range-thumb {
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      border: 1px solid #000000;
+      height: 36px;
+      width: 16px;
+      border-radius: 3px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    input[type=range]::-ms-track {
+      width: 100%;
+      height: 8.4px;
+      cursor: pointer;
+      animate: 0.2s;
+      background: transparent;
+      border-color: transparent;
+      border-width: 16px 0;
+      color: transparent;
+    }
+
+    input[type=range]::-ms-fill-lower {
+      background: #2a6495;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+
+    input[type=range]::-ms-fill-upper {
+      background: #3071a9;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+
+    input[type=range]::-ms-thumb {
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      border: 1px solid #000000;
+      height: 36px;
+      width: 16px;
+      border-radius: 3px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    input[type=range]:focus::-ms-fill-lower {
+      background: #3071a9;
+    }
+
+    input[type=range]:focus::-ms-fill-upper {
+      background: #367ebd;
     }
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      const suffix = this.dataset.sizing || '';
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
   </script>
 
 </body>
+
 </html>
